@@ -1,15 +1,37 @@
-
-<<<<<<< HEAD
-
-var regex = /was/;
-var str = 'hello world';
-var result = regex.test(str);
-console.log(result);
-// returns true
-=======
+let form = document.querySelector(".adicionar")
+let itens = []
 form.addEventListener('submit' , (e) => {
     e.preventDefault(e)
-    let nome = e.target[0].value
-    let quant = e.target[1].value
+
+    let nome = e.target.elements['nome'].value.trim()
+    let quantidade = e.target.elements['quantidade'].value
+
+    if (nome.length > 0 && quantidade.length > 0 && quantidade > 0 ){
+        CriarElemento(nome,quantidade)
+        e.target.elements['nome'].value = ''
+        e.target.elements['quantidade'].value = ''
+    }
+    else{
+        alert("Preencha os campos corretamente")
+    }
 })
->>>>>>> f6788d4b5683fe5061c4fc2ad6947f8fddaef676
+
+function CriarElemento(nome,quantidade){
+    const novoItem = document.createElement('li')
+    novoItem.classList.add('item')
+
+    const  numeroItem = document.createElement('strong')
+    numeroItem.innerHTML = quantidade
+
+    novoItem.appendChild(numeroItem)
+    novoItem.innerHTML += nome
+
+    let itemAtual = {
+        'nome':nome,
+        'quantidade':quantidade
+    }
+    itens.push(itemAtual)
+
+    localStorage.setItem('item',JSON.stringify(itens))
+    document.querySelector('#lista').appendChild(novoItem)
+}
