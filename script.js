@@ -1,5 +1,20 @@
 let form = document.querySelector(".adicionar")
-let itens = []
+let item = []
+const itens = localStorage.getItem('itens') || []
+let itensSeparados = JSON.parse(itens)
+
+const lista = document.querySelector(".lista")
+document.querySelector('.body').addEventListener('onload',CarregarItens(itensSeparados))
+
+function CarregarItens(itensSeparados){
+    for (let index = 0; index < itensSeparados.length; index++) {
+        console.log(itensSeparados[index])
+        
+    }
+}
+
+
+
 form.addEventListener('submit' , (e) => {
     e.preventDefault(e)
 
@@ -17,21 +32,23 @@ form.addEventListener('submit' , (e) => {
 })
 
 function CriarElemento(nome,quantidade){
-    const novoItem = document.createElement('li')
-    novoItem.classList.add('item')
+   const novoItem = document.createElement('li');
+   novoItem.classList.add('item');
 
-    const  numeroItem = document.createElement('strong')
-    numeroItem.innerHTML = quantidade
+   const novoNum = document.createElement('strong');
+   novoNum.innerHTML = quantidade;
+   novoItem.appendChild(novoNum);
 
-    novoItem.appendChild(numeroItem)
-    novoItem.innerHTML += nome
+   novoItem.innerHTML += nome;
+   lista.appendChild(novoItem)
+   let ItemAtual = {
+    'nome':nome,
+    'quantidade':quantidade
+   };
 
-    let itemAtual = {
-        'nome':nome,
-        'quantidade':quantidade
-    }
-    itens.push(itemAtual)
+   item.push(ItemAtual);
+   localStorage.setItem('itens',JSON.stringify(item))
 
-    localStorage.setItem('item',JSON.stringify(itens))
-    document.querySelector('#lista').appendChild(novoItem)
+
+
 }
