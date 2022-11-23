@@ -1,18 +1,13 @@
 let form = document.querySelector(".adicionar")
-let item = []
-const itens = localStorage.getItem('itens') || []
-let itensSeparados = JSON.parse(itens)
-
+const itens = JSON.parse(localStorage.getItem('itens')) || []
 const lista = document.querySelector(".lista")
-document.querySelector('.body').addEventListener('onload',CarregarItens(itensSeparados))
 
-function CarregarItens(itensSeparados){
-    for (let index = 0; index < itensSeparados.length; index++) {
-        console.log(itensSeparados[index])
-        
-    }
-}
 
+
+
+itens.forEach(element => {
+    CriarElemento(element)
+});
 
 
 form.addEventListener('submit' , (e) => {
@@ -22,33 +17,37 @@ form.addEventListener('submit' , (e) => {
     let quantidade = e.target.elements['quantidade'].value
 
     if (nome.length > 0 && quantidade.length > 0 && quantidade > 0 ){
-        CriarElemento(nome,quantidade)
+        const existe = itens.find(elemento => elemento.nome === nome)
+        if (existe != ''){
+            existe.quantidade +=quantidade
+        }
+        const itemAtual = {
+            'nome':nome,
+            'quantidade':quantidade
+        }
+
+        CriarElemento(itemAtual)
+        itens.push(itemAtual)
+        localStorage.setItem('itens',JSON.stringify(itens))
+
         e.target.elements['nome'].value = ''
         e.target.elements['quantidade'].value = ''
+        
     }
     else{
         alert("Preencha os campos corretamente")
     }
 })
 
-function CriarElemento(nome,quantidade){
-   const novoItem = document.createElement('li');
-   novoItem.classList.add('item');
+function CriarElemento(item){
+   let novoItem = document.createElement('li')
+   novoItem.classList.add('item')
 
-   const novoNum = document.createElement('strong');
-   novoNum.innerHTML = quantidade;
-   novoItem.appendChild(novoNum);
+   let novoNum = document.createElement("strong")
+   novoNum.innerHTML += item.quantidade
+   novoItem.appendChild(novoNum)
+   novoItem.innerHTML += item.nome
 
-   novoItem.innerHTML += nome;
    lista.appendChild(novoItem)
-   let ItemAtual = {
-    'nome':nome,
-    'quantidade':quantidade
-   };
-
-   item.push(ItemAtual);
-   localStorage.setItem('itens',JSON.stringify(item))
-
-
 
 }
