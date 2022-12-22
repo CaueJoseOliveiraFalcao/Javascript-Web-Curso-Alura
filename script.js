@@ -44,22 +44,24 @@ function criaElemento(item) {
     NovoNum.dataset.id = item.id
 
     NovoItem.appendChild(NovoNum)
-    NovoItem.appendChild(botaodeleta())
+    NovoItem.appendChild(botaodeleta(item.id))
     lista.appendChild(NovoItem)
 }
 function AtualizaItem(item){
     document.querySelector("[data-id='"+item.id+"']").innerHTML = item.quantidade
 }
 
-function botaodeleta(e){
+function botaodeleta(id){
     const butao = document.createElement('button')
     butao.innerText = 'X'
     butao.addEventListener('click' , function(){
-        console.log(this.parentNode)
-        DeletaItem(this.parentNode)
+        console.log(this.parentNode )
+        DeletaItem(this.parentNode,id)
     })
      return butao
 }
-function DeletaItem(tag){
+function DeletaItem(tag,id){
     tag.remove()
+    itens.splice(itens.findIndex(element => element.id == id),1)
+    localStorage.setItem('itens' , JSON.stringify(itens))
 }
